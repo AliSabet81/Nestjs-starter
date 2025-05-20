@@ -4,6 +4,7 @@ import { Global, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 
 import config from '../config';
 import { LoggerService } from './logger/logger.service';
+import { DatabaseService } from '../database/database.service';
 import { LoggerMiddleware } from './middleware/logger/logger.middleware';
 import { TransformResponseInterceptor } from './interceptors/transform-response/transform-response.interceptor';
 
@@ -16,8 +17,9 @@ import { TransformResponseInterceptor } from './interceptors/transform-response/
       useClass: TransformResponseInterceptor,
     },
     LoggerService,
+    DatabaseService,
   ],
-  exports: [LoggerService],
+  exports: [LoggerService, DatabaseService],
 })
 export class CoreModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
