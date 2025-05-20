@@ -1,11 +1,11 @@
+import { ConfigService } from '@nestjs/config';
+import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { AppService } from './app.service';
-import { LoggerService } from './core/logger/logger.service';
-import { createMock } from '@golevelup/ts-jest';
-import { ConfigService } from '@nestjs/config';
-import { DatabaseService } from './database/database.service';
 import { CacheService } from './core/cache/cache.service';
+import { LoggerService } from './core/logger/logger.service';
+import { DatabaseService } from './database/database.service';
 
 describe('AppService', () => {
   let appService: AppService;
