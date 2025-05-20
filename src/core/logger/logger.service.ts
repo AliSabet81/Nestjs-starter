@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import * as winston from 'winston';
 import { ConfigService } from '@nestjs/config';
 import { Injectable, LoggerService as NestLoggerService } from '@nestjs/common';
@@ -20,8 +18,10 @@ export class LoggerService implements NestLoggerService {
           colorize(),
           timestamp(),
           printf(
-            ({ level, message, context, timestamp }) =>
-              `${timestamp} ${level} [${context}]: ${message}`,
+            ({ level, message, context, timestamp, meta }) =>
+              `${timestamp} ${level} [${context}]: ${message} ${
+                meta ? JSON.stringify(meta) : ''
+              }`,
           ),
         )
       : combine(timestamp(), json());
@@ -32,15 +32,15 @@ export class LoggerService implements NestLoggerService {
     });
   }
 
-  log(message: string, context?: string) {
-    this.logger.info(message, { context });
+  log(message: string, context?: string, meta?: any) {
+    this.logger.info(message, { context, meta });
   }
 
-  error(message: string, context?: string) {
-    this.logger.error(message, { context });
+  error(message: string, trace?: string, context?: string, meta?: any) {
+    this.logger.error(message, { trace, context, meta });
   }
 
-  warn(message: string, context?: string) {
-    this.logger.warn(message, { context });
+  warn(message: string, context?: string, meta?: any) {
+    this.logger.warn(message, { context, meta });
   }
 }
