@@ -20,9 +20,11 @@ export class AppService {
     const envTest = this.configService.get<string>('environment');
 
     const users = await this.databaseService.user.findMany();
-    this.cache.set('key', users, 1000);
+    this.cache.set('key', 'VALUE FROM CACHE', 1000);
     const value = await this.cache.get('key');
 
-    return { message: 'Hello World!', cacheValue: value, envTest, users };
+    console.log(value, envTest, users);
+
+    return 'Hello World!';
   }
 }
