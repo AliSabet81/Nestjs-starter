@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
+import { CacheService } from './core/cache/cache.service';
 import { LoggerService } from './core/logger/logger.service';
 import { DatabaseService } from './database/database.service';
 
@@ -11,13 +12,17 @@ export class AppService {
     private configService: ConfigService,
     private logger: LoggerService,
     private databaseService: DatabaseService,
+    private cache: CacheService,
   ) {}
 
-  getHello(): string {
+  async getHello() {
     this.logger.log('calling log from inside getHello method', this.context);
     const envTest = this.configService.get<string>('environment');
-    console.log(envTest);
-    this.databaseService.user.findMany();
-    return 'Hello World!';
+
+    const users = await this.databaseService.user.findMany();
+    this.cache.set('key', users, 1000);
+    const value = await this.cache.get('key');
+
+    return { message: 'Hello World!', cacheValue: value, envTest, users };
   }
 }
