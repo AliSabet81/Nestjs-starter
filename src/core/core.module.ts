@@ -1,5 +1,6 @@
 import { ConfigModule } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
 import { Global, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 
 import config from '../config';
@@ -10,7 +11,10 @@ import { TransformResponseInterceptor } from './interceptors/transform-response/
 
 @Global()
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true, load: [config] })],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true, load: [config] }),
+    CacheModule.register(),
+  ],
   providers: [
     {
       provide: APP_INTERCEPTOR,
@@ -18,6 +22,10 @@ import { TransformResponseInterceptor } from './interceptors/transform-response/
     },
     LoggerService,
     DatabaseService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CacheInterceptor,
+    },
   ],
   exports: [LoggerService, DatabaseService],
 })
