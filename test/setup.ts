@@ -1,12 +1,14 @@
-import { HttpServer, INestApplication, ValidationPipe } from '@nestjs/common';
+import helmet from 'helmet';
+import { App } from 'supertest/types';
 import { Test, TestingModule } from '@nestjs/testing';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
+
 import { AppModule } from '../src/app.module';
 import { CacheService } from '../src/core/cache/cache.service';
 import { DatabaseService } from '../src/database/database.service';
-import helmet from 'helmet';
 
 let app: INestApplication;
-let server: HttpServer;
+let server: App;
 let moduleFixture: TestingModule;
 let cache: CacheService;
 let database: DatabaseService;
